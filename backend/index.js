@@ -42,7 +42,6 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // -- Rota para novo usuário --
 
 app.post('/register', async (req, res) => {
-    console.log('CORPO DA REQUISIÇÃO RECEBIDO:', req.body);
     const { nome, email, senha, telefone } = req.body;
     if (!nome || !email || !senha) {
         return res.status(400).json({ error: 'Nome, email e senha são obrigatórios.' });
@@ -75,7 +74,7 @@ app.post('/login', async (req, res) => {
     }
 
     try {
-        const userResult = await db.query('SELECT * FROM Usuario WHERE email = $1', [email]);
+        const userResult = await db.query('SELECT * FROM usuarios WHERE email = $1', [email]);
         if (userResult.rows.length === 0) {
             return res.status(401).json({ error: 'Credenciais inválidas.' });
         }
