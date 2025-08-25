@@ -1,7 +1,11 @@
 # Painel de Vendedor - Marketplace 🛍️
 Este projeto foi desenvolvido como parte de um processo seletivo, simulando o painel de controle de um vendedor em um marketplace. A aplicação permite que usuários se cadastrem, façam login e gerenciem seus produtos (cadastro, visualização, edição, exclusão e filtragem).
 
-
+![title](./backend/uploads/login.png)
+![title](./backend/uploads/cadastro.png)
+![title](./backend/uploads/produtos.png)
+![title](./backend/uploads/novo.png)
+![title](./backend/uploads/editar.png)
 
 ## ✨ Funcionalidades
 * Autenticação de Usuários: Sistema completo de Cadastro e Login com persistência de sessão via JWT.
