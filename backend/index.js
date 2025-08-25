@@ -42,7 +42,6 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // -- Rota para novo usuário --
 
 app.post('/register', async (req, res) => {
-    console.log('CORPO DA REQUISIÇÃO RECEBIDO:', req.body);
     const { nome, email, senha, telefone } = req.body;
     if (!nome || !email || !senha) {
         return res.status(400).json({ error: 'Nome, email e senha são obrigatórios.' });
@@ -75,7 +74,7 @@ app.post('/login', async (req, res) => {
     }
 
     try {
-        const userResult = await db.query('SELECT * FROM Usuario WHERE email = $1', [email]);
+        const userResult = await db.query('SELECT * FROM usuarios WHERE email = $1', [email]);
         if (userResult.rows.length === 0) {
             return res.status(401).json({ error: 'Credenciais inválidas.' });
         }
@@ -102,69 +101,69 @@ app.post('/login', async (req, res) => {
 
 // -- Rota de criar produto --
 
-app.post('/produtos', authenticateToken, upload.single('imagem'), async (req, res) => {
-    const { nome, descricao, preco, status, categoria_id } = req.body;
+// app.post('/produtos', authenticateToken, upload.single('imagem'), async (req, res) => {
+//     const { nome, descricao, preco, status, categoria_id } = req.body;
     
-    const usuario_id = req.user.userId;
+//     const usuario_id = req.user.userId;
 
-    const imagem_url = req.file ? `/uploads/${req.file.filename}` : null;
+//     const imagem_url = req.file ? `/uploads/${req.file.filename}` : null;
 
-    if (!nome || !preco || !categoria_id) {
-        return res.status(400).json({ error: 'Nome, preço e categoria são obrigatórios.' });
-    }
+//     if (!nome || !preco || !categoria_id) {
+//         return res.status(400).json({ error: 'Nome, preço e categoria são obrigatórios.' });
+//     }
 
-    try {
-        const query = `
-            INSERT INTO produtos (nome, descricao, preco, status, imagem_url, usuario_id, categoria_id)
-            VALUES ($1, $2, $3, $4, $5, $6, $7)
-            RETURNING *;
-        `;
+//     try {
+//         const query = `
+//             INSERT INTO produtos (nome, descricao, preco, status, imagem_url, usuario_id, categoria_id)
+//             VALUES ($1, $2, $3, $4, $5, $6, $7)
+//             RETURNING *;
+//         `;
         
-        const values = [nome, descricao, preco, status || 'ativo', imagem_url, usuario_id, categoria_id];
+//         const values = [nome, descricao, preco, status || 'ativo', imagem_url, usuario_id, categoria_id];
         
-        const result = await db.query(query, values);
+//         const result = await db.query(query, values);
 
-        res.status(201).json(result.rows[0]);
-    } catch (error) {
-        console.error('Erro ao cadastrar produto:', error);
-        res.status(500).json({ error: 'Erro interno ao cadastrar o produto.' });
-    }
-});
+//         res.status(201).json(result.rows[0]);
+//     } catch (error) {
+//         console.error('Erro ao cadastrar produto:', error);
+//         res.status(500).json({ error: 'Erro interno ao cadastrar o produto.' });
+//     }
+// });
 
 
 // -- Rota de listar produtos com filtros --
-app.get('/produtos', authenticateToken, async (req, res) => {
-    const usuario_id = req.user.userId;
-    const { search, status } = req.query; // (ex: /produtos?search=livro&status=ativo)
+// app.get('/produtos', authenticateToken, async (req, res) => {
+//     const usuario_id = req.user.userId;
+//     const { search, status } = req.query; // (ex: /produtos?search=livro&status=ativo)
 
-    let query = `
-        SELECT p.*, c.nome as categoria_nome 
-        FROM produtos p
-        JOIN categorias c ON p.categoria_id = c.id
-        WHERE p.usuario_id = $1
-    `;
-    const values = [usuario_id];
+//     let query = `
+//         SELECT p.*, c.nome as categoria_nome 
+//         FROM produtos p
+//         JOIN categorias c ON p.categoria_id = c.id
+//         WHERE p.usuario_id = $1
+//     `;
+//     const values = [usuario_id];
 
-    if (search) {
-        values.push(`%${search}%`); 
-        query += ` AND p.nome ILIKE $${values.length}`; 
-    }
+//     if (search) {
+//         values.push(`%${search}%`); 
+//         query += ` AND p.nome ILIKE $${values.length}`; 
+//     }
 
-    if (status) {
-        values.push(status);
-        query += ` AND p.status = $${values.length}`;
-    }
+//     if (status) {
+//         values.push(status);
+//         query += ` AND p.status = $${values.length}`;
+//     }
     
-    query += ' ORDER BY p.id DESC;'; 
+//     query += ' ORDER BY p.id DESC;'; 
 
-    try {
-        const result = await db.query(query, values);
-        res.status(200).json(result.rows);
-    } catch (error) {
-        console.error('Erro ao listar produtos:', error);
-        res.status(500).json({ error: 'Erro interno ao listar os produtos.' });
-    }
-});
+//     try {
+//         const result = await db.query(query, values);
+//         res.status(200).json(result.rows);
+//     } catch (error) {
+//         console.error('Erro ao listar produtos:', error);
+//         res.status(500).json({ error: 'Erro interno ao listar os produtos.' });
+//     }
+// });
 
 app.listen(port, () => {
   console.log(`Servidor rodando na porta ${port}`);
