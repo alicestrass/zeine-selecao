@@ -6,7 +6,6 @@ export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
 
-    // Carrega do localStorage ao iniciar
     useEffect(() => {
         const storedToken = localStorage.getItem("token");
         const storedUser = localStorage.getItem("user");
@@ -17,7 +16,6 @@ export function AuthProvider({ children }) {
         }
     }, []);
 
-    // Função de login
     async function login(email, senha) {
         try {
             const response = await api.post("/login", { email, senha });
