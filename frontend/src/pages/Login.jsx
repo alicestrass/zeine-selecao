@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 import { Eye, Mail, Lock, User, Phone } from "lucide-react";
 import api from "../services/api";
 
 export default function Login() {
     const [mode, setMode] = useState("login");
-
+    const navigate = useNavigate();
     const { login } = useAuth();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -63,6 +64,7 @@ export default function Login() {
         if (mode === "login") {
             try {
                 await login(email, password);
+                navigate("/produtos");
             } catch (err) {
                 setError("E-mail ou senha inválidos");
             }
@@ -76,24 +78,13 @@ export default function Login() {
             {/* Lado esquerdo */}
             <div className="hidden md:flex w-1/2 bg-[#fdf7f7] flex-col justify-center items-center p-12 relative">
                 <h1 className="text-2xl font-bold flex items-center gap-2 mb-6">
-                    <span className="w-8 h-8 rounded-md bg-orange-600"></span>
+                    <img src="/image.png" alt="Logo" className="w-8 h-8 rounded-md object-cover"></img>
                     Marketplace
                 </h1>
                 <p className="text-gray-500 mb-6">Painel do Vendedor</p>
 
-                <div className="bg-white shadow-md rounded-xl p-6">
-                    <div className="flex flex-col gap-4">
-                        <span className="px-3 py-2 rounded-lg bg-blue-50 text-blue-700">
-                            📦 Gerencie seus anúncios
-                        </span>
-                        <span className="px-3 py-2 rounded-lg bg-blue-50 text-blue-700">
-                            📈 Veja sua loja crescendo
-                        </span>
-                        <span className="px-3 py-2 rounded-lg bg-blue-50 text-blue-700">
-                            🏷️ Acompanhe os produtos vendidos
-                        </span>
-                    </div>
-                </div>
+                <img src="/4781bg.png"></img>
+
             </div>
 
             {/* Lado direito */}
